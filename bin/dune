@@ -1,4 +1,4 @@
 (executable
- (public_name a4)
+ (public_name Final_Project)
  (name main)
- (libraries a4))
+ (libraries Final_Project))
