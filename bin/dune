@@ -1,4 +1,5 @@
 (executable
  (public_name Final_Project)
  (name main)
- (libraries Final_Project))
+ (libraries Final_Project logs opium str cohttp-lwt-unix yojson lwt.unix)
+ (preprocess (pps lwt_ppx)))
