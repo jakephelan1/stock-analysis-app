@@ -1,0 +1,31 @@
+---
+# Members of your group.
+group:
+  - name: Daniel Sachs
+    netid: ds2393
+  - name: Jake Phelan
+    netid: jtp243
+  - name: Alan Zhao
+    netid: az456
+# Your PM.
+pm:
+  name: Mason Raffo
+  netid: msr286
+# Set to false if you don't want your gallery entry to be public.
+publish: true
+# Pithy title
+title: "Stock Financial Assistant"
+# OK if this is a Cornell Github link, but public gallery viewers won't be able to see it.
+git-repo: "https://github.coecis.cornell.edu/jrt273/CS-3110-Final-Project"
+# Replace the URL with your own demo video.
+demo-video-url: "https://youtu.be/VLGbpgOwc94"
+# Write a short, attention-grabbing description of your project.
+desc: >
+  Our financial assistant is to create a tool that makes analyzing stock data easy and useful for users. 
+  It allows people to enter stock symbols, choose time intervals, and get helpful insights like moving 
+  averages. The idea is to keep the interface simple so that anyone, regardless of their financial 
+  background, can use the tool to make more informed decisions about their investments. Specifically, 
+  we decided to focus on calculating moving averages as a core metric, which gives users a clearer 
+  picture of stock trends over a period of time. The moving average is particularly useful because 
+  it smooths out day-to-day price fluctuations and highlights the overall direction of the stock's 
+  performance.

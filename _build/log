@@ -1,8 +1,8 @@
 # dune exec bin/main.exe
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Shared cache location: /Users/jakephelan/.cache/dune/db
-# Workspace root: "/Users/jakephelan/Desktop/CS 3110/CS-3110-Final-Project"
+# Shared cache location: /home/az234/.cache/dune/db
+# Workspace root: /home/az234/3110/CS-3110-Final-Project
 # Auto-detected concurrency: 8
 # Dune context:
 #  { name = "default"
@@ -13,4 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /Users/jakephelan/.opam/cs3110-2024fa/bin/ocamlc.opt -config > /var/folders/n7/6mk7q3qj6wz7vb1dxshp2mq80000gn/T/dune_032e20_output
+$ /home/az234/.opam/cs3110-2024fa/bin/ocamlc.opt -config > /tmp/dune_72f6c7_output
