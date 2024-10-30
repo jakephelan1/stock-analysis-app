@@ -1,4 +1,4 @@
 (test
  (name test_Final_Project)
- (deps (glob_files_rec ../data/*))
- (libraries ounit2 Final_Project))
+ (libraries Final_Project ounit2 logs opium str cohttp-lwt-unix yojson lwt.unix)
+ (preprocess (pps lwt_ppx)))
