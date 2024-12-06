@@ -73,7 +73,8 @@ Once the application is running:
 1. Navigate to http://localhost:3000 in your web browser
 2. Enter your stock portfolio information
 3. Submit to receive analysis and recommendations
-4. View detailed financial ratios and portfolio optimization suggestions
+4. View detailed financial ratios and portfolio optimization suggestions.
+Note: If you recieve an 'Internal Server Error' it is due to the API only allowing 25 requests per day.
 
 ## Testing
 The project includes comprehensive unit tests covering:
