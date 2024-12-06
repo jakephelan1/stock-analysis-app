@@ -25,7 +25,7 @@ desc: >
   It allows people to enter stock symbols, choose time intervals, and get helpful insights like moving 
   averages. The idea is to keep the interface simple so that anyone, regardless of their financial 
   background, can use the tool to make more informed decisions about their investments. Specifically, 
-  we decided to focus on calculating moving averages as a core metric, which gives users a clearer 
+  we decided to focus on calculating different ratios and moving averages as a core metric, which gives users a clearer 
   picture of stock trends over a period of time. The moving average is particularly useful because 
   it smooths out day-to-day price fluctuations and highlights the overall direction of the stock's 
   performance.
