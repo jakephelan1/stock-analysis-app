@@ -1,6 +1,6 @@
 # Stock Portfolio Analysis Project
 
-Created by: [Jake Phelan], [Daniel Sachs], and [Alan Zhao] 
+Created by: Jake Phelan, Daniel Sachs, and Alan Zhao 
 
 https://github.com/user-attachments/assets/83715de1-e7ce-4e35-9707-d4c8c35e6b28
 
