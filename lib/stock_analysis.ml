@@ -4,38 +4,38 @@ open Ratios
 
 let score_ratio name value =
   match name with
-  | "Cash Ratio" -> if value > 0.5 then 1 else if value > 0.2 then 0 else -1
+  | "Cash Ratio" -> if value > 0.7 then 1 else if value > 0.4 then 0 else -1
   | "Acid Test Ratio" ->
-      if value > 1.0 then 1 else if value > 0.8 then 0 else -1
-  | "Current Ratio" -> if value > 2.0 then 1 else if value > 1.5 then 0 else -1
+      if value > 1.2 then 1 else if value > 0.9 then 0 else -1
+  | "Current Ratio" -> if value > 2.5 then 1 else if value > 1.8 then 0 else -1
   | "Days Receivables" ->
-      if value < 30.0 then 1 else if value < 45.0 then 0 else -1
+      if value < 25.0 then 1 else if value < 40.0 then 0 else -1
   | "Days Payable Outstanding" ->
-      if value > 45.0 then 1 else if value > 30.0 then 0 else -1
+      if value > 50.0 then 1 else if value > 35.0 then 0 else -1
   | "Days of Inventory" ->
-      if value < 60.0 then 1 else if value < 90.0 then 0 else -1
+      if value < 50.0 then 1 else if value < 80.0 then 0 else -1
   | "Debt to Assets (Debt Ratio)" ->
-      if value < 0.3 then 1 else if value < 0.5 then 0 else -1
+      if value < 0.25 then 1 else if value < 0.45 then 0 else -1
   | "Total Debt to EBITDA" ->
-      if value < 3.0 then 1 else if value < 4.0 then 0 else -1
+      if value < 2.5 then 1 else if value < 3.5 then 0 else -1
   | "Interest Cover Ratio" ->
-      if value > 5.0 then 1 else if value > 3.0 then 0 else -1
+      if value > 6.0 then 1 else if value > 4.0 then 0 else -1
   | "Debt-to-Equity Ratio" ->
-      if value < 1.0 then 1 else if value < 2.0 then 0 else -1
+      if value < 0.8 then 1 else if value < 1.8 then 0 else -1
   | "Equity Multiplier" ->
-      if value < 2.0 then 1 else if value < 3.0 then 0 else -1
+      if value < 1.8 then 1 else if value < 2.5 then 0 else -1
   | "Return on Assets (ROA)" ->
-      if value > 10.0 then 1 else if value > 5.0 then 0 else -1
+      if value > 12.0 then 1 else if value > 6.0 then 0 else -1
   | "Return on Equity (ROE)" ->
-      if value > 15.0 then 1 else if value > 10.0 then 0 else -1
+      if value > 18.0 then 1 else if value > 12.0 then 0 else -1
   | "Gross Profit Margin" ->
-      if value > 40.0 then 1 else if value > 30.0 then 0 else -1
+      if value > 45.0 then 1 else if value > 35.0 then 0 else -1
   | "Operating Margin" ->
-      if value > 15.0 then 1 else if value > 10.0 then 0 else -1
+      if value > 18.0 then 1 else if value > 12.0 then 0 else -1
   | "EBITDA Margin" ->
-      if value > 20.0 then 1 else if value > 15.0 then 0 else -1
+      if value > 25.0 then 1 else if value > 18.0 then 0 else -1
   | "Pre-Tax Margin" ->
-      if value > 10.0 then 1 else if value > 5.0 then 0 else -1
+      if value > 12.0 then 1 else if value > 7.0 then 0 else -1
   | _ -> 0
 
 (* For testing purposes *)

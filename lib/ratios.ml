@@ -1,13 +1,21 @@
 open Lwt.Infix
 open Api_client
 
+
+let safe_float_of_get_val report key =
+  match get_val report key with
+  | "None" -> 0.0
+  | value ->
+      try float_of_string value
+      with Failure _ -> 0.0
+
 let cash_ratio balance =
   try
     let cashAndCashEquivalentsAtCarryingValue =
-      float_of_string (get_val balance "cashAndCashEquivalentsAtCarryingValue")
+      safe_float_of_get_val balance "cashAndCashEquivalentsAtCarryingValue"
     in
     let totalCurrentLiabilities =
-      float_of_string (get_val balance "totalCurrentLiabilities")
+      safe_float_of_get_val balance "totalCurrentLiabilities"
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else cashAndCashEquivalentsAtCarryingValue /. totalCurrentLiabilities
@@ -22,14 +30,14 @@ let cash_ratio balance =
 let acid_test_ratio balance =
   try
     let totalCurrentAssets =
-      float_of_string (get_val balance "totalCurrentAssets")
+      safe_float_of_get_val balance "totalCurrentAssets"
     in
     let inventory =
       let inv = get_val balance "inventory" in
       if inv = "None" then 0.0 else float_of_string inv
     in
     let totalCurrentLiabilities =
-      float_of_string (get_val balance "totalCurrentLiabilities")
+      safe_float_of_get_val balance "totalCurrentLiabilities"
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else (totalCurrentAssets -. inventory) /. totalCurrentLiabilities
@@ -44,10 +52,10 @@ let acid_test_ratio balance =
 let current_ratio balance =
   try
     let totalCurrentAssets =
-      float_of_string (get_val balance "totalCurrentAssets")
+      safe_float_of_get_val balance "totalCurrentAssets"
     in
     let totalCurrentLiabilities =
-      float_of_string (get_val balance "totalCurrentLiabilities")
+      safe_float_of_get_val balance "totalCurrentLiabilities"
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else totalCurrentAssets /. totalCurrentLiabilities
@@ -69,9 +77,9 @@ let liquidity balance =
 let days_receivables balance income =
   try
     let currentNetReceivables =
-      float_of_string (get_val balance "currentNetReceivables")
+      safe_float_of_get_val balance "currentNetReceivables"
     in
-    let totalRevenue = float_of_string (get_val income "totalRevenue") in
+    let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0
     else currentNetReceivables /. totalRevenue *. 365.0
   with
@@ -85,9 +93,9 @@ let days_receivables balance income =
 let days_payable_outstanding balance income =
   try
     let currentAccountsPayable =
-      float_of_string (get_val balance "currentAccountsPayable")
+      safe_float_of_get_val balance "currentAccountsPayable"
     in
-    let costOfRevenue = float_of_string (get_val income "costOfRevenue") in
+    let costOfRevenue = safe_float_of_get_val income "costOfRevenue" in
     if costOfRevenue = 0.0 then 0.0
     else currentAccountsPayable /. costOfRevenue *. 365.0
   with
@@ -104,7 +112,7 @@ let days_of_inventory balance income =
       let inv = get_val balance "inventory" in
       if inv = "None" then 0.0 else float_of_string inv
     in
-    let costOfRevenue = float_of_string (get_val income "costOfRevenue") in
+    let costOfRevenue = safe_float_of_get_val income "costOfRevenue" in
     if costOfRevenue = 0.0 then 0.0 else inventory /. costOfRevenue *. 365.0
   with
   | Failure msg ->
@@ -130,9 +138,12 @@ let efficiency balance income =
 
 let debt_to_assets_ratio balance =
   try
-    let shortTermDebt = float_of_string (get_val balance "shortTermDebt") in
-    let longTermDebt = float_of_string (get_val balance "longTermDebt") in
-    let totalAssets = float_of_string (get_val balance "totalAssets") in
+    let shortTermDebt = safe_float_of_get_val balance "shortTermDebt" in
+    let longTermDebt =
+      let ltd = get_val balance "longTermDebt" in
+      if ltd = "None" then 0.0 else float_of_string ltd
+    in
+    let totalAssets = safe_float_of_get_val balance "totalAssets" in
     if totalAssets = 0.0 then 0.0
     else (shortTermDebt +. longTermDebt) /. totalAssets
   with
@@ -145,9 +156,9 @@ let debt_to_assets_ratio balance =
 
 let total_debt_to_ebitda balance income =
   try
-    let shortTermDebt = float_of_string (get_val balance "shortTermDebt") in
-    let longTermDebt = float_of_string (get_val balance "longTermDebt") in
-    let ebitda = float_of_string (get_val income "ebitda") in
+    let shortTermDebt = safe_float_of_get_val balance "shortTermDebt" in
+    let longTermDebt = safe_float_of_get_val balance "longTermDebt" in
+    let ebitda = safe_float_of_get_val income "ebitda" in
     if ebitda = 0.0 then 0.0 else (shortTermDebt +. longTermDebt) /. ebitda
   with
   | Failure msg ->
@@ -159,7 +170,7 @@ let total_debt_to_ebitda balance income =
 
 let interest_cover_ratio income =
   try
-    let ebit = float_of_string (get_val income "ebit") in
+    let ebit = safe_float_of_get_val income "ebit" in
     let interestExpense =
       let ie = get_val income "interestExpense" in
       if ie = "None" then 0.0 else float_of_string ie
@@ -176,10 +187,10 @@ let interest_cover_ratio income =
 let debt_to_equity_ratio balance =
   try
     let totalLiabilities =
-      float_of_string (get_val balance "totalLiabilities")
+      safe_float_of_get_val balance "totalLiabilities"
     in
     let totalShareholderEquity =
-      float_of_string (get_val balance "totalShareholderEquity")
+      safe_float_of_get_val balance "totalShareholderEquity"
     in
     if totalShareholderEquity = 0.0 then 0.0
     else totalLiabilities /. totalShareholderEquity
@@ -193,9 +204,9 @@ let debt_to_equity_ratio balance =
 
 let equity_multiplier balance =
   try
-    let totalAssets = float_of_string (get_val balance "totalAssets") in
+    let totalAssets = safe_float_of_get_val balance "totalAssets" in
     let totalShareholderEquity =
-      float_of_string (get_val balance "totalShareholderEquity")
+      safe_float_of_get_val balance "totalShareholderEquity"
     in
     if totalShareholderEquity = 0.0 then 0.0
     else totalAssets /. totalShareholderEquity
@@ -226,8 +237,8 @@ let leverage balance income =
 
 let return_on_assets balance income =
   try
-    let netIncome = float_of_string (get_val income "netIncome") in
-    let totalAssets = float_of_string (get_val balance "totalAssets") in
+    let netIncome = safe_float_of_get_val income "netIncome" in
+    let totalAssets = safe_float_of_get_val balance "totalAssets" in
     if totalAssets = 0.0 then 0.0 else netIncome /. totalAssets *. 100.0
   with
   | Failure msg ->
@@ -239,9 +250,9 @@ let return_on_assets balance income =
 
 let return_on_equity balance income =
   try
-    let netIncome = float_of_string (get_val income "netIncome") in
+    let netIncome = safe_float_of_get_val income "netIncome" in
     let totalShareholderEquity =
-      float_of_string (get_val balance "totalShareholderEquity")
+      safe_float_of_get_val balance "totalShareholderEquity"
     in
     if totalShareholderEquity = 0.0 then 0.0
     else netIncome /. totalShareholderEquity *. 100.0
@@ -255,8 +266,8 @@ let return_on_equity balance income =
 
 let gross_profit_margin income =
   try
-    let grossProfit = float_of_string (get_val income "grossProfit") in
-    let totalRevenue = float_of_string (get_val income "totalRevenue") in
+    let grossProfit = safe_float_of_get_val income "grossProfit" in
+    let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else grossProfit /. totalRevenue *. 100.0
   with
   | Failure msg ->
@@ -268,8 +279,8 @@ let gross_profit_margin income =
 
 let operating_margin income =
   try
-    let operatingIncome = float_of_string (get_val income "operatingIncome") in
-    let totalRevenue = float_of_string (get_val income "totalRevenue") in
+    let operatingIncome = safe_float_of_get_val income "operatingIncome" in
+    let totalRevenue = safe_float_of_get_val income "totalRevenue" in
 
     if totalRevenue = 0.0 then 0.0 else operatingIncome /. totalRevenue *. 100.0
   with
@@ -282,8 +293,8 @@ let operating_margin income =
 
 let ebitda_margin income =
   try
-    let ebitda = float_of_string (get_val income "ebitda") in
-    let totalRevenue = float_of_string (get_val income "totalRevenue") in
+    let ebitda = safe_float_of_get_val income "ebitda" in
+    let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else ebitda /. totalRevenue *. 100.0
   with
   | Failure msg ->
@@ -295,8 +306,8 @@ let ebitda_margin income =
 
 let pre_tax_margin income =
   try
-    let incomeBeforeTax = float_of_string (get_val income "incomeBeforeTax") in
-    let totalRevenue = float_of_string (get_val income "totalRevenue") in
+    let incomeBeforeTax = safe_float_of_get_val income "incomeBeforeTax" in
+    let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else incomeBeforeTax /. totalRevenue *. 100.0
   with
   | Failure msg ->

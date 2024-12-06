@@ -9,5 +9,5 @@ let () =
   Logs.set_level (Some Logs.Info);
   App.empty
   |> App.get "/" serve_input_page
-  |> App.post "/process" process_form
+  |> App.post "/results" process_form
   |> App.run_command

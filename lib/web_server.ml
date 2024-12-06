@@ -40,7 +40,7 @@ let find_optimal_destination rank positives =
   in
   match
     List.find_opt
-      (fun (sym, rank2) -> abs_float ((rank *. -1.) -. rank2) < 0.3)
+      (fun (sym, rank2) -> abs_float ((rank *. -1.) -. rank2) < 0.2)
       positives
   with
   | Some (sym, _) -> sym
