@@ -65,16 +65,6 @@ let generate_recommendations point_vals portfolio =
         (sym, assets, dest))
       negatives
 
-let print_recommendations recs =
-  if List.is_empty recs then
-    "Keep your money where it currently is. Your stock picks seem to be \
-     performing well"
-  else
-    List.fold_left
-      (fun acc (sym, assets, dest) ->
-        acc ^ "Move $" ^ string_of_int assets ^ " to " ^ dest ^ "\n")
-      "" recs
-
 let serve_input_page _req =
   serve_static_file "index.html" >>= fun content ->
   let headers = Opium.Headers.of_list [ ("Content-Type", "text/html") ] in
@@ -93,10 +83,14 @@ let serve_result_page point_vals portfolio =
   let formatted_recommendations =
     List.map
       (fun (sym, assets, dest) ->
-        Printf.sprintf "<li>Move $%.2f from %s to %s</li>" assets sym
-          (match dest with
-          | Some d -> d
-          | None -> "No Destination"))
+        match dest with
+        | Some d ->
+            Printf.sprintf "<li>Move $%.2f from %s to %s</li>" assets sym d
+        | None ->
+            Printf.sprintf
+              "<li>Take $%.2f out of %s and consider investing in better \
+               stocks like AAPL and GOOGL</li>"
+              assets sym)
       recommendations
     |> String.concat "\n"
   in
