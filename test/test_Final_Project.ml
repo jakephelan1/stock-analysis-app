@@ -1,5 +1,3 @@
-(* test/stock_logic_test.ml *)
-
 open OUnit2
 open Lwt.Infix
 open Yojson.Basic.Util
@@ -9,8 +7,9 @@ open Yojson.Basic.Util
    - Final_Project.Ratios
    Make sure to adjust the module paths according to your actual project structure.
 *)
-open Final_Project.Stock_logic
 open Final_Project.Ratios
+open Final_Project.Api_client
+open Final_Project.Stock_analysis
 
 (* Helper function for rounding to two decimal places *)
 let round_to_hundredths f =
@@ -93,7 +92,7 @@ let mock_incomplete_balance_sheet_json = Yojson.Basic.from_string
     }
   |}
 
-let mock_zero_liabilities_balance_sheet_json = Yojson.Basic.from_string
+let mock_zero_debt_balance_sheet_json = Yojson.Basic.from_string
   {|
     {
       "annualReports": [
@@ -105,10 +104,10 @@ let mock_zero_liabilities_balance_sheet_json = Yojson.Basic.from_string
           "inventory": "200000",
           "currentNetReceivables": "100000",
           "currentAccountsPayable": "50000",
-          "shortTermDebt": "200000",
-          "longTermDebt": "800000",
+          "shortTermDebt": "0",
+          "longTermDebt": "0",
           "totalAssets": "3000000",
-          "totalLiabilities": "1200000",
+          "totalLiabilities": "100000",
           "totalShareholderEquity": "1800000"
         }
       ]
@@ -134,11 +133,27 @@ let mock_zero_revenue_income_statement_json = Yojson.Basic.from_string
     }
   |}
 
+  let mock_zero_ebitda_income_statement_json = Yojson.Basic.from_string
+  {|
+    {
+      "annualReports": [
+        {
+          "fiscalDateEnding": "2023",
+          "totalRevenue": "0",
+          "costOfRevenue": "1000000",
+          "netIncome": "500000",
+          "grossProfit": "1000000",
+          "operatingIncome": "400000",
+          "ebitda": "0",
+          "incomeBeforeTax": "480000",
+          "interestExpense": "20000"
+        }
+      ]
+    }
+  |}
+
 (* Extract the first (and only) report from the mock JSON data and convert it to (string * string) list *)
-let extract_first_report json =
-  match extract_data json with
-  | [] -> failwith "No annual reports found"
-  | report :: _ -> report
+let extract_first_report json = extract_data json 
 
 (* Test Cases *)
 
@@ -181,7 +196,7 @@ let test_profitability_ratios _ =
 
 (* Test Calculate Moving Average *)
 let test_calculate_moving_average _ =
-  let prices = extract_prices mock_stock_data_json "2024-10-24" "2024-10-29" in
+  let prices = extract_prices_with_date mock_stock_data_json "2024-10-24" "2024-10-29" in
   let moving_average = calculate_moving_average prices 3 in
   let rounded_ma = round_to_hundredths moving_average in
   assert_equal ~printer:string_of_float 231.17 rounded_ma
@@ -265,16 +280,16 @@ let test_pre_tax_margin _ =
   let rounded_ptm = round_to_hundredths ptm in
   assert_equal ~printer:string_of_float 24.0 rounded_ptm
 
-(* Test Debt to Assets Ratio with Zero Liabilities *)
-let test_debt_to_assets_zero_liabilities _ =
-  let balance = extract_first_report mock_zero_liabilities_balance_sheet_json in
+(* Test Debt to Assets Ratio with Zero Debt *)
+let test_debt_to_assets_zero_debt _ =
+  let balance = extract_first_report mock_zero_debt_balance_sheet_json in
   let ratio = debt_to_assets_ratio balance in
   assert_equal ~printer:string_of_float 0.0 ratio
 
 (* Test Total Debt to EBITDA with Zero EBITDA *)
 let test_total_debt_to_ebitda_zero_ebitda _ =
   let balance = extract_first_report mock_balance_sheet_json in
-  let income = extract_first_report mock_zero_revenue_income_statement_json in
+  let income = extract_first_report mock_zero_ebitda_income_statement_json in
   let ratio = total_debt_to_ebitda balance income in
   assert_equal ~printer:string_of_float 0.0 ratio
 
@@ -415,7 +430,7 @@ let tests =
          "Test Operating Margin" >:: test_operating_margin;
          "Test EBITDA Margin" >:: test_ebitda_margin;
          "Test Pre-Tax Margin" >:: test_pre_tax_margin;
-         "Test Debt to Assets Ratio with Zero Liabilities" >:: test_debt_to_assets_zero_liabilities;
+         "Test Debt to Assets Ratio with Zero Debt" >:: test_debt_to_assets_zero_debt;
          "Test Total Debt to EBITDA with Zero EBITDA" >:: test_total_debt_to_ebitda_zero_ebitda;
          "Test Interest Cover Ratio with Zero Interest Expense" >:: test_interest_cover_ratio_zero_interest;
          "Test Equity Multiplier with Zero Shareholder Equity" >:: test_equity_multiplier_zero_equity;

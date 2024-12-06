@@ -1,4 +1,0 @@
-(lang dune 3.16)
-(name Final_Project)
-(sections (lib .) (bin ../../bin) (doc ../../doc/Final_Project))
-(files (lib (META dune-package opam)) (bin (Final_Project)) (doc (README.md)))

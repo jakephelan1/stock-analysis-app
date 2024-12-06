@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock Price Analyzer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .stock-input {
+            margin-bottom: 10px;
+        }
+        input {
+            margin-right: 10px;
+        }
+        button {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Stock Price Analyzer</h1>
-  
-  <form action="/process" method="post">
-    <label for="symbol">Enter Stock Symbol:</label>
-    <input type="text" id="symbol" name="symbol" required><br><br>
-
-    <label for="start_date">Start Date (YYYY-MM-DD):</label>
-    <input type="text" id="start_date" name="start_date" required><br><br>
-
-    <label for="end_date">End Date (YYYY-MM-DD):</label>
-    <input type="text" id="end_date" name="end_date"><br><br>
-
+    <h1>Stock Portfolio Tracker</h1>
+    <form action="/process" method="post">
+      <div id="stockInputs">
+        <div class="stock-input">
+            <input type="text" name="symbol[0]" placeholder="Stock Symbol" id="symbol">
+            <input type="number" name="amount[0]" placeholder="Amount ($)" id="amount">
+            <button type="button" onclick="removeStockInput(this)">Remove</button>
+        </div>
+    </div>
+    <button type="button" onclick="addStockInput()">Add Another Stock</button>
     <button type="submit">Analyze</button>
-  </form>
+    </form>
+
+    <script>
+        function addStockInput() {
+            const stockInputs = document.getElementById('stockInputs');
+            const stockCount = stockInputs.children.length;  // Get the current number of inputs
+            const newInput = document.createElement('div');
+            newInput.className = 'stock-input';
+            newInput.innerHTML = `
+                <input type="text" name="symbol[${stockCount}]" placeholder="Stock Symbol" id="symbol">
+                <input type="number" name="amount[${stockCount}]" placeholder="Amount ($)" id="amount">
+                <button type="button" onclick="removeStockInput(this)">Remove</button>
+            `;
+            stockInputs.appendChild(newInput);
+        }
+
+        function removeStockInput(button) {
+            button.parentElement.remove();
+        }
+    </script>
 </body>
 </html>
