@@ -1,13 +1,10 @@
 open Lwt.Infix
 open Api_client
 
-
 let safe_float_of_get_val report key =
   match get_val report key with
   | "None" -> 0.0
-  | value ->
-      try float_of_string value
-      with Failure _ -> 0.0
+  | value -> ( try float_of_string value with Failure _ -> 0.0)
 
 let cash_ratio balance =
   try
@@ -32,9 +29,7 @@ let acid_test_ratio balance =
     let totalCurrentAssets =
       safe_float_of_get_val balance "totalCurrentAssets"
     in
-    let inventory =
-      let inv = get_val balance "inventory" in
-      if inv = "None" then 0.0 else float_of_string inv
+    let inventory = safe_float_of_get_val balance "inventory"
     in
     let totalCurrentLiabilities =
       safe_float_of_get_val balance "totalCurrentLiabilities"
@@ -186,9 +181,7 @@ let interest_cover_ratio income =
 
 let debt_to_equity_ratio balance =
   try
-    let totalLiabilities =
-      safe_float_of_get_val balance "totalLiabilities"
-    in
+    let totalLiabilities = safe_float_of_get_val balance "totalLiabilities" in
     let totalShareholderEquity =
       safe_float_of_get_val balance "totalShareholderEquity"
     in

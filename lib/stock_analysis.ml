@@ -7,11 +7,14 @@ let score_ratio name value =
   | "Cash Ratio" -> if value > 0.7 then 1 else if value > 0.4 then 0 else -1
   | "Acid Test Ratio" ->
       if value > 1.2 then 1 else if value > 0.9 then 0 else -1
-  | "Current Ratio" -> if value > 2.5 then 1 else if value > 1.8 then 0 else -1
+  | "Current Ratio" -> if value > 1.8 then 1 else if value > 1.3 then 0 else -1
   | "Days Receivables" ->
       if value < 25.0 then 1 else if value < 40.0 then 0 else -1
   | "Days Payable Outstanding" ->
-      if value > 50.0 then 1 else if value > 35.0 then 0 else -1
+      if value > 90.0 then -1
+      else if value > 50.0 then 1
+      else if value > 35.0 then 0
+      else -1
   | "Days of Inventory" ->
       if value < 50.0 then 1 else if value < 80.0 then 0 else -1
   | "Debt to Assets (Debt Ratio)" ->
@@ -21,7 +24,7 @@ let score_ratio name value =
   | "Interest Cover Ratio" ->
       if value > 6.0 then 1 else if value > 4.0 then 0 else -1
   | "Debt-to-Equity Ratio" ->
-      if value < 0.8 then 1 else if value < 1.8 then 0 else -1
+      if value < 0.8 then 1 else if value < 1.5 then 0 else -1
   | "Equity Multiplier" ->
       if value < 1.8 then 1 else if value < 2.5 then 0 else -1
   | "Return on Assets (ROA)" ->
@@ -35,7 +38,7 @@ let score_ratio name value =
   | "EBITDA Margin" ->
       if value > 25.0 then 1 else if value > 18.0 then 0 else -1
   | "Pre-Tax Margin" ->
-      if value > 12.0 then 1 else if value > 7.0 then 0 else -1
+      if value > 15.0 then 1 else if value > 10.0 then 0 else -1
   | _ -> 0
 
 (* For testing purposes *)
@@ -111,7 +114,7 @@ let rank_stock stock =
   let sma_50 = calculate_moving_average prices 50 in
   let sma_200 = calculate_moving_average prices 200 in
   let moving_average_score =
-    if sma_50 > sma_200 then 2 else if sma_50 < sma_200 then -2 else 0
+    if sma_50 > sma_200 then 3 else if sma_50 < sma_200 then -3 else 0
   in
   let unscaled_score =
     List.fold_left
@@ -121,6 +124,6 @@ let rank_stock stock =
   in
   let scaled_score =
     if List.length ratios = 0 then 0.0
-    else float_of_int unscaled_score /. float_of_int (List.length ratios + 2)
+    else float_of_int unscaled_score /. float_of_int (List.length ratios + 3)
   in
   Lwt.return scaled_score

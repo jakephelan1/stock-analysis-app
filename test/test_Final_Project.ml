@@ -436,8 +436,7 @@ let test_fetch_stock_data _ =
   let statement = "BALANCE_SHEET" in
   (* Since fetch_stock_data performs an actual HTTP request, it's better to mock
      this function. However, for simplicity, we'll assume it returns the
-     mock_balance_sheet_json. In a real-world scenario, consider using libraries
-     like `ounit-mocks` or dependency injection. *)
+     mock_balance_sheet_json. *)
   let fetched_json = fetch_stock_data symbol statement |> Lwt_main.run in
   (* Compare fetched_json with mock_balance_sheet_json *)
   (* This is a placeholder as actual mocking is not implemented here *)
