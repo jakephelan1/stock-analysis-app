@@ -114,7 +114,7 @@ let rank_stock stock =
   let sma_50 = calculate_moving_average prices 50 in
   let sma_200 = calculate_moving_average prices 200 in
   let moving_average_score =
-    if sma_50 > sma_200 then 2 else if sma_50 < sma_200 then -2 else 0
+    if sma_50 > sma_200 then 3 else if sma_50 < sma_200 then -3 else 0
   in
   let unscaled_score =
     List.fold_left
@@ -124,6 +124,6 @@ let rank_stock stock =
   in
   let scaled_score =
     if List.length ratios = 0 then 0.0
-    else float_of_int unscaled_score /. float_of_int (List.length ratios + 2)
+    else float_of_int unscaled_score /. float_of_int (List.length ratios + 3)
   in
   Lwt.return scaled_score
