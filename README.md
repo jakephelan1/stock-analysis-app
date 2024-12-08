@@ -2,7 +2,7 @@
 
 Created by: Jake Phelan, Daniel Sachs, and Alan Zhao 
 
-https://github.com/user-attachments/assets/eecae646-c495-4413-95cb-f0b2b4cdcc7a
+https://github.com/user-attachments/assets/d81dbac5-6c00-46f2-9404-5ec069b2afb5
 
 ## Project Overview
 This project is a stock portfolio analysis tool built using OCaml and the Opium framework. It fetches financial data from the Alpha Vantage API, calculates financial ratios, and provides recommendations for portfolio optimization.
