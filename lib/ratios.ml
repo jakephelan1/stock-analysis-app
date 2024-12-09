@@ -166,9 +166,7 @@ let total_debt_to_ebitda balance income =
 let interest_cover_ratio income =
   try
     let ebit = safe_float_of_get_val income "ebit" in
-    let interestExpense =
-      let ie = get_val income "interestExpense" in
-      if ie = "None" then 0.0 else float_of_string ie
+    let interestExpense = safe_float_of_get_val income "interestExpense"
     in
     if interestExpense = 0.0 then 0.0 else ebit /. interestExpense
   with
