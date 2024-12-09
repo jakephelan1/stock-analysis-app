@@ -65,6 +65,7 @@ let mock_income_statement_json =
           "grossProfit": "1000000",
           "operatingIncome": "400000",
           "ebitda": "450000",
+          "ebit": "400000",
           "incomeBeforeTax": "480000",
           "interestExpense": "20000"
         }
