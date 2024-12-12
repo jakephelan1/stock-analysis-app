@@ -58,7 +58,7 @@ let extract_prices_with_date json start_date end_date =
         in
         (date, close_price) :: acc
       else acc)
-    [] time_series
+    [] time_series  
 
 let extract_prices json =
   let time_series =
@@ -126,4 +126,5 @@ let rank_stock stock =
     if List.length ratios = 0 then 0.0
     else float_of_int unscaled_score /. float_of_int (List.length ratios + 3)
   in
-  Lwt.return scaled_score
+  Lwt.return scaled_score 
+ 

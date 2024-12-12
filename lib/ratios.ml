@@ -20,9 +20,7 @@ let cash_ratio balance =
   | Failure msg ->
       print_endline ("Error: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred.";
-      0.0
+
 
 let acid_test_ratio balance =
   try
@@ -40,9 +38,7 @@ let acid_test_ratio balance =
   | Failure msg ->
       print_endline ("Error: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred.";
-      0.0
+
 
 let current_ratio balance =
   try
@@ -58,9 +54,7 @@ let current_ratio balance =
   | Failure msg ->
       print_endline ("Error: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred.";
-      0.0
+
 
 let liquidity balance =
   let liq_list = [] in
@@ -81,9 +75,7 @@ let days_receivables balance income =
   | Failure msg ->
       print_endline ("Error in days_receivables: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in days_receivables.";
-      0.0
+
 
 let days_payable_outstanding balance income =
   try
@@ -97,9 +89,7 @@ let days_payable_outstanding balance income =
   | Failure msg ->
       print_endline ("Error in days_payable_outstanding: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in days_payable_outstanding.";
-      0.0
+
 
 let days_of_inventory balance income =
   try
@@ -113,9 +103,7 @@ let days_of_inventory balance income =
   | Failure msg ->
       print_endline ("Error in days_of_inventory: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in days_of_inventory.";
-      0.0
+
 
 let efficiency balance income =
   let op_list = [] in
@@ -145,9 +133,7 @@ let debt_to_assets_ratio balance =
   | Failure msg ->
       print_endline ("Error in debt_to_assets_ratio: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in debt_to_assets_ratio.";
-      0.0
+ 
 
 let total_debt_to_ebitda balance income =
   try
@@ -159,9 +145,7 @@ let total_debt_to_ebitda balance income =
   | Failure msg ->
       print_endline ("Error in total_debt_to_ebitda: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in total_debt_to_ebitda.";
-      0.0
+  
 
 let interest_cover_ratio income =
   try
@@ -173,9 +157,7 @@ let interest_cover_ratio income =
   | Failure msg ->
       print_endline ("Error in interest_cover_ratio: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in interest_cover_ratio.";
-      0.0
+
 
 let debt_to_equity_ratio balance =
   try
@@ -189,9 +171,7 @@ let debt_to_equity_ratio balance =
   | Failure msg ->
       print_endline ("Error in debt_to_equity_ratio: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in debt_to_equity_ratio.";
-      0.0
+
 
 let equity_multiplier balance =
   try
@@ -205,9 +185,7 @@ let equity_multiplier balance =
   | Failure msg ->
       print_endline ("Error in equity_multiplier: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in equity_multiplier.";
-      0.0
+
 
 let leverage balance income =
   let fin_list = [] in
@@ -235,9 +213,7 @@ let return_on_assets balance income =
   | Failure msg ->
       print_endline ("Error in return_on_assets: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in return_on_assets.";
-      0.0
+ 
 
 let return_on_equity balance income =
   try
@@ -251,9 +227,7 @@ let return_on_equity balance income =
   | Failure msg ->
       print_endline ("Error in return_on_equity: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in return_on_equity.";
-      0.0
+
 
 let gross_profit_margin income =
   try
@@ -264,9 +238,7 @@ let gross_profit_margin income =
   | Failure msg ->
       print_endline ("Error in gross_profit_margin: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in gross_profit_margin.";
-      0.0
+
 
 let operating_margin income =
   try
@@ -278,9 +250,7 @@ let operating_margin income =
   | Failure msg ->
       print_endline ("Error in operating_margin: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in operating_margin.";
-      0.0
+
 
 let ebitda_margin income =
   try
@@ -291,9 +261,7 @@ let ebitda_margin income =
   | Failure msg ->
       print_endline ("Error in ebitda_margin: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in ebitda_margin.";
-      0.0
+ 
 
 let pre_tax_margin income =
   try
@@ -304,9 +272,7 @@ let pre_tax_margin income =
   | Failure msg ->
       print_endline ("Error in pre_tax_margin: " ^ msg);
       0.0
-  | _ ->
-      print_endline "Unexpected error occurred in pre_tax_margin.";
-      0.0
+
 
 let profitability balance income =
   let profit_list = [] in
