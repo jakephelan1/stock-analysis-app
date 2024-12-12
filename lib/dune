@@ -1,6 +1,6 @@
 (library
  (name Final_Project)
- (libraries csv logs opium str cohttp-lwt-unix yojson lwt.unix)
+ (libraries logs opium str cohttp-lwt-unix yojson lwt.unix)
  (preprocess (pps lwt_ppx))
  (instrumentation
   (backend bisect_ppx)))
