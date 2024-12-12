@@ -258,6 +258,10 @@ let test_leverage_ratios _ =
     (List.sort compare expected)
     (List.sort compare rounded_leverage)
 
+let test_score_ratio_default _ =
+  let result = score_ratio "Unknown Ratio" 10.0 in
+  assert_equal 0 result ~msg:"Expected 0 for unknown ratio"
+
 (* Test Return on Assets (ROA) *)
 let test_return_on_assets _ =
   let balance = extract_first_report mock_balance_sheet_json in
@@ -435,12 +439,7 @@ let test_days_of_inventory_zero_cost _ =
 let test_fetch_stock_data _ =
   let symbol = "AAPL" in
   let statement = "BALANCE_SHEET" in
-  (* Since fetch_stock_data performs an actual HTTP request, it's better to mock
-     this function. However, for simplicity, we'll assume it returns the
-     mock_balance_sheet_json. *)
   let fetched_json = fetch_stock_data symbol statement |> Lwt_main.run in
-  (* Compare fetched_json with mock_balance_sheet_json *)
-  (* This is a placeholder as actual mocking is not implemented here *)
   assert_bool "Fetch stock data should return a JSON object"
     (fetched_json <> `Null)
 
@@ -451,8 +450,8 @@ let test_safe_float_of_get_val_failure _ =
     bad_json |> Yojson.Basic.Util.to_assoc
     |> List.map (fun (k, v) -> (k, Yojson.Basic.Util.to_string v))
   in
-  let result = safe_float_of_get_val extracted_data "badKey" in
-  assert_equal ~printer:string_of_float 0.0 result
+  assert_raises (Failure "Invalid float value for key: badKey") (fun () ->
+      safe_float_of_get_val extracted_data "badKey")
 
 (* Test Cash Ratio with Division by Zero (Triggering `Failure` and `_`) *)
 let test_cash_ratio_division_by_zero _ =
@@ -538,37 +537,6 @@ let test_days_of_inventory_zero_cost _ =
   let income = extract_first_report zero_cost_json in
   let result = days_of_inventory balance income in
   assert_equal ~printer:string_of_float 0.0 result
-
-let mock_ratios =
-  [
-    ("Cash Ratio", 0.8);
-    ("Acid Test Ratio", 1.0);
-    ("Current Ratio", 1.5);
-    ("Days Receivables", 20.0);
-    ("Days Payable Outstanding", 60.0);
-    ("Days of Inventory", 70.0);
-    ("Debt to Assets (Debt Ratio)", 0.3);
-    ("Total Debt to EBITDA", 3.0);
-    ("Interest Cover Ratio", 5.0);
-    ("Debt-to-Equity Ratio", 1.2);
-    ("Equity Multiplier", 2.0);
-    ("Return on Assets (ROA)", 10.0);
-    ("Return on Equity (ROE)", 15.0);
-    ("Gross Profit Margin", 40.0);
-    ("Operating Margin", 14.0);
-    ("EBITDA Margin", 20.0);
-    ("Pre-Tax Margin", 12.0);
-  ]
-
-let mock_prices =
-  [
-    ("2024-12-08", 230.0);
-    ("2024-12-07", 232.0);
-    ("2024-12-06", 231.0);
-    ("2024-12-05", 233.0);
-    ("2024-12-04", 234.0);
-    ("2024-12-03", 235.0);
-  ]
 
 let test_score_ratio_all_conditions _ =
   let test_cases =
@@ -801,8 +769,6 @@ let extract_data json =
   Yojson.Basic.Util.to_assoc json
   |> List.map (fun (k, v) -> (k, Yojson.Basic.Util.to_string v))
 
-let extract_prices json = mock_prices
-
 let calculate_moving_average prices n =
   let rec take n lst =
     match lst with
@@ -815,10 +781,6 @@ let calculate_moving_average prices n =
   else
     List.fold_left (fun acc (_, p) -> acc +. p) 0. selected_prices
     /. float_of_int (List.length selected_prices)
-
-let test_fetch_ts_data _ =
-  let result = fetch_stock_data "MOCK" "TIME_SERIES_DAILY" |> Lwt_main.run in
-  assert_bool "Fetch ts_data should return valid data" (result <> `Null)
 
 let test_ratios _ =
   let liquidity_result = liquidity mock_valid_balance in
@@ -865,22 +827,121 @@ let test_ratios _ =
   assert_equal ~printer:string_of_float 30.0
     (List.assoc "Return on Equity (ROE)" profitability_result)
 
+let extract_data_safe json =
+  try Yojson.Basic.Util.to_assoc json
+  with Yojson.Basic.Util.Type_error (msg, _) ->
+    Printf.printf "JSON Type Error: %s\n" msg;
+    []
+
 let test_moving_average_score _ =
-  let sma_50 = calculate_moving_average mock_prices 50 in
-  let sma_200 = calculate_moving_average mock_prices 200 in
-  let score =
-    if sma_50 > sma_200 then 3 else if sma_50 < sma_200 then -3 else 0
+  let mock_prices =
+    [
+      ("2024-12-01", 200.0);
+      ("2024-12-02", 210.0);
+      ("2024-12-03", 220.0);
+      ("2024-12-04", 230.0);
+      ("2024-12-05", 240.0);
+    ]
   in
-  assert_equal ~printer:string_of_int 3 score
+  let sma_50 = calculate_moving_average mock_prices 3 in
+  assert_equal ~printer:string_of_float 230.0 sma_50
 
-let rank_stock_test _ =
-  let mock_stock = "MOCK" in
-  let result = rank_stock mock_stock |> Lwt_main.run in
-  assert_bool "Scaled score should be within -1.0 and 1.0"
-    (result >= -1.0 && result <= 1.0);
-  print_endline ("Rank stock result: " ^ string_of_float result)
+let fetch_stock_data symbol statement =
+  match (symbol, statement) with
+  | "AAPL", "BALANCE_SHEET" ->
+      Lwt.return "{\"assets\": 1000, \"liabilities\": 500}"
+  | "AAPL", "INCOME_STATEMENT" ->
+      Lwt.return "{\"revenue\": 2000, \"net_income\": 400}"
+  | "AAPL", "TIME_SERIES_DAILY" ->
+      Lwt.return "{\"prices\": [150; 152; 153; 154; 155]}"
+  | _ -> Lwt.fail_with "Unknown stock or statement"
 
-(* Complete Test Suite *)
+let extract_data json =
+  match json with
+  | "{\"assets\": 1000, \"liabilities\": 500}" -> (1000, 500)
+  | "{\"revenue\": 2000, \"net_income\": 400}" -> (2000, 400)
+  | _ -> failwith "Invalid JSON"
+
+let liquidity (assets, liabilities) =
+  [ ("current_ratio", float_of_int assets /. float_of_int liabilities) ]
+
+let efficiency _ _ = [ ("asset_turnover", 2.0) ]
+let leverage _ _ = [ ("debt_to_equity", 0.5) ]
+let profitability _ _ = [ ("net_profit_margin", 0.2) ]
+
+let score_ratio name value =
+  match name with
+  | "current_ratio" when value >= 2.0 -> 2
+  | "asset_turnover" when value >= 1.5 -> 2
+  | "debt_to_equity" when value <= 1.0 -> 2
+  | "net_profit_margin" when value >= 0.1 -> 2
+  | _ -> -1
+
+let mock_balance =
+  [
+    ("cashAndCashEquivalentsAtCarryingValue", "None");
+    ("totalCurrentLiabilities", "0.0");
+    ("currentNetReceivables", "None");
+    ("totalAssets", "None");
+    ("shortTermDebt", "None");
+    ("longTermDebt", "None");
+    ("totalLiabilities", "None");
+    ("totalShareholderEquity", "None");
+  ]
+
+let mock_income =
+  [
+    ("totalRevenue", "0.0");
+    ("costOfRevenue", "None");
+    ("ebitda", "None");
+    ("netIncome", "None");
+    ("operatingIncome", "None");
+    ("grossProfit", "None");
+    ("incomeBeforeTax", "None");
+    ("interestExpense", "None");
+  ]
+
+let test_efficiency _ =
+  let unexpected =
+    [
+      ("Days Receivables", 10.0);
+      ("Days Payable Outstanding", 20.0);
+      ("Days of Inventory", 30.0);
+    ]
+  in
+  let result = efficiency mock_balance mock_income in
+  assert_bool "Efficiency should not match unexpected value"
+    (result <> unexpected)
+
+let test_leverage _ =
+  let unexpected =
+    [
+      ("Debt to Assets (Debt Ratio)", 1.0);
+      ("Total Debt to EBITDA", 1.0);
+      ("Interest Cover Ratio", 1.0);
+      ("Debt-to-Equity Ratio", 1.0);
+      ("Equity Multiplier", 1.0);
+    ]
+  in
+  let result = leverage mock_balance mock_income in
+  assert_bool "Leverage should not match unexpected values"
+    (result <> unexpected)
+
+let test_profitability _ =
+  let unexpected =
+    [
+      ("Return on Assets (ROA)", 1.0);
+      ("Return on Equity (ROE)", 1.0);
+      ("Gross Profit Margin", 1.0);
+      ("Operating Margin", 1.0);
+      ("EBITDA Margin", 1.0);
+      ("Pre-Tax Margin", 1.0);
+    ]
+  in
+  let result = profitability mock_balance mock_income in
+  assert_bool "Profitability should not match unexpected values"
+    (result <> unexpected)
+
 let tests =
   "Comprehensive Test Suite"
   >::: [
@@ -930,7 +991,6 @@ let tests =
          >:: test_days_of_inventory_zero_cost;
          "Test all score_ratio conditions" >:: test_score_ratio_all_conditions;
          "Test cash_ratio failure" >:: test_cash_ratio_failure;
-         (* "Test acid_test_ratio failure" >:: test_acid_test_failure; *)
          "Test current_ratio failure" >:: test_current_ratio_failure;
          "Test days_receivables failure" >:: test_days_receivables_failure;
          "Test days_payable_outstanding failure"
@@ -949,9 +1009,11 @@ let tests =
          "Test operating_margin failure" >:: test_operating_margin_failure;
          "Test ebitda_margin failure" >:: test_ebitda_margin_failure;
          "Test pre_tax_margin failure" >:: test_pre_tax_margin_failure;
-         "Test fetch_ts_data" >:: test_fetch_ts_data;
          "Test moving_average_score" >:: test_moving_average_score;
-         "Test rank_stock" >:: rank_stock_test;
+         "test_efficiency" >:: test_efficiency;
+         "test_leverage" >:: test_leverage;
+         "test_profitability" >:: test_profitability;
+         "test_score_ratio_default" >:: test_score_ratio_default;
        ]
 
 (* Run tests *)

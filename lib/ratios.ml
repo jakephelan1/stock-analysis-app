@@ -3,8 +3,11 @@ open Api_client
 
 let safe_float_of_get_val report key =
   match get_val report key with
-  | "None" -> 0.0
-  | value -> ( try float_of_string value with Failure _ -> 0.0)
+  | "None" -> raise (Failure ("Missing value for key: " ^ key))
+  | value -> (
+      try float_of_string value
+      with Failure _ ->
+        raise (Failure ("Invalid float value for key: " ^ key)))
 
 let cash_ratio balance =
   try
@@ -16,29 +19,20 @@ let cash_ratio balance =
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else cashAndCashEquivalentsAtCarryingValue /. totalCurrentLiabilities
-  with
-  | Failure msg ->
-      print_endline ("Error: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let acid_test_ratio balance =
   try
     let totalCurrentAssets =
       safe_float_of_get_val balance "totalCurrentAssets"
     in
-    let inventory = safe_float_of_get_val balance "inventory"
-    in
+    let inventory = safe_float_of_get_val balance "inventory" in
     let totalCurrentLiabilities =
       safe_float_of_get_val balance "totalCurrentLiabilities"
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else (totalCurrentAssets -. inventory) /. totalCurrentLiabilities
-  with
-  | Failure msg ->
-      print_endline ("Error: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let current_ratio balance =
   try
@@ -50,11 +44,7 @@ let current_ratio balance =
     in
     if totalCurrentLiabilities = 0.0 then failwith "Division by zero"
     else totalCurrentAssets /. totalCurrentLiabilities
-  with
-  | Failure msg ->
-      print_endline ("Error: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let liquidity balance =
   let liq_list = [] in
@@ -71,11 +61,7 @@ let days_receivables balance income =
     let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0
     else currentNetReceivables /. totalRevenue *. 365.0
-  with
-  | Failure msg ->
-      print_endline ("Error in days_receivables: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let days_payable_outstanding balance income =
   try
@@ -85,11 +71,7 @@ let days_payable_outstanding balance income =
     let costOfRevenue = safe_float_of_get_val income "costOfRevenue" in
     if costOfRevenue = 0.0 then 0.0
     else currentAccountsPayable /. costOfRevenue *. 365.0
-  with
-  | Failure msg ->
-      print_endline ("Error in days_payable_outstanding: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let days_of_inventory balance income =
   try
@@ -99,11 +81,7 @@ let days_of_inventory balance income =
     in
     let costOfRevenue = safe_float_of_get_val income "costOfRevenue" in
     if costOfRevenue = 0.0 then 0.0 else inventory /. costOfRevenue *. 365.0
-  with
-  | Failure msg ->
-      print_endline ("Error in days_of_inventory: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let efficiency balance income =
   let op_list = [] in
@@ -129,11 +107,7 @@ let debt_to_assets_ratio balance =
     let totalAssets = safe_float_of_get_val balance "totalAssets" in
     if totalAssets = 0.0 then 0.0
     else (shortTermDebt +. longTermDebt) /. totalAssets
-  with
-  | Failure msg ->
-      print_endline ("Error in debt_to_assets_ratio: " ^ msg);
-      0.0
- 
+  with Failure msg -> 0.0
 
 let total_debt_to_ebitda balance income =
   try
@@ -141,23 +115,14 @@ let total_debt_to_ebitda balance income =
     let longTermDebt = safe_float_of_get_val balance "longTermDebt" in
     let ebitda = safe_float_of_get_val income "ebitda" in
     if ebitda = 0.0 then 0.0 else (shortTermDebt +. longTermDebt) /. ebitda
-  with
-  | Failure msg ->
-      print_endline ("Error in total_debt_to_ebitda: " ^ msg);
-      0.0
-  
+  with Failure msg -> 0.0
 
 let interest_cover_ratio income =
   try
     let ebit = safe_float_of_get_val income "ebit" in
-    let interestExpense = safe_float_of_get_val income "interestExpense"
-    in
+    let interestExpense = safe_float_of_get_val income "interestExpense" in
     if interestExpense = 0.0 then 0.0 else ebit /. interestExpense
-  with
-  | Failure msg ->
-      print_endline ("Error in interest_cover_ratio: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let debt_to_equity_ratio balance =
   try
@@ -167,11 +132,7 @@ let debt_to_equity_ratio balance =
     in
     if totalShareholderEquity = 0.0 then 0.0
     else totalLiabilities /. totalShareholderEquity
-  with
-  | Failure msg ->
-      print_endline ("Error in debt_to_equity_ratio: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let equity_multiplier balance =
   try
@@ -181,11 +142,7 @@ let equity_multiplier balance =
     in
     if totalShareholderEquity = 0.0 then 0.0
     else totalAssets /. totalShareholderEquity
-  with
-  | Failure msg ->
-      print_endline ("Error in equity_multiplier: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let leverage balance income =
   let fin_list = [] in
@@ -209,11 +166,7 @@ let return_on_assets balance income =
     let netIncome = safe_float_of_get_val income "netIncome" in
     let totalAssets = safe_float_of_get_val balance "totalAssets" in
     if totalAssets = 0.0 then 0.0 else netIncome /. totalAssets *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in return_on_assets: " ^ msg);
-      0.0
- 
+  with Failure msg -> 0.0
 
 let return_on_equity balance income =
   try
@@ -223,22 +176,14 @@ let return_on_equity balance income =
     in
     if totalShareholderEquity = 0.0 then 0.0
     else netIncome /. totalShareholderEquity *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in return_on_equity: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let gross_profit_margin income =
   try
     let grossProfit = safe_float_of_get_val income "grossProfit" in
     let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else grossProfit /. totalRevenue *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in gross_profit_margin: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let operating_margin income =
   try
@@ -246,33 +191,21 @@ let operating_margin income =
     let totalRevenue = safe_float_of_get_val income "totalRevenue" in
 
     if totalRevenue = 0.0 then 0.0 else operatingIncome /. totalRevenue *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in operating_margin: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let ebitda_margin income =
   try
     let ebitda = safe_float_of_get_val income "ebitda" in
     let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else ebitda /. totalRevenue *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in ebitda_margin: " ^ msg);
-      0.0
- 
+  with Failure msg -> 0.0
 
 let pre_tax_margin income =
   try
     let incomeBeforeTax = safe_float_of_get_val income "incomeBeforeTax" in
     let totalRevenue = safe_float_of_get_val income "totalRevenue" in
     if totalRevenue = 0.0 then 0.0 else incomeBeforeTax /. totalRevenue *. 100.0
-  with
-  | Failure msg ->
-      print_endline ("Error in pre_tax_margin: " ^ msg);
-      0.0
-
+  with Failure msg -> 0.0
 
 let profitability balance income =
   let profit_list = [] in
