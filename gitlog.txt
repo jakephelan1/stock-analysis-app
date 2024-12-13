@@ -1,0 +1,166 @@
+commit 40bab213557286b5c435209b8edb79398787a71f
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 12 21:26:40 2024 -0500
+
+    Update YAML, Install. Add specs for portfolio and api_client
+
+commit 64262721c05e25c471bd88cd231189dd4721a361
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 12 16:39:51 2024 -0500
+
+    add ratio.mli file and specs
+
+commit eba3382cfbbb8c7e7af523328340bcc59e96afe0
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 12 13:41:15 2024 -0500
+
+    Update INSTALL.md and add mli files for stock_analysis, and web_server with specs.
+
+commit 43b7454a73c8eb2e02e1906ed0fb215ab15e03df
+Author: Daniel Sachs <ds2393@cornell.edu>
+Date:   Thu Dec 12 03:09:03 2024 -0500
+
+    Updated tests
+
+commit 486ff2dea6a25a5f5f71b475892eeb2552b153c3
+Author: Daniel Sachs <ds2393@cornell.edu>
+Date:   Thu Dec 12 02:24:45 2024 -0500
+
+    Updated test cases
+
+commit 8b51170392af3daeba6da141ee937180e6dc6fe4
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Sun Dec 8 23:31:44 2024 -0500
+
+    bug fixes
+
+commit 9d968a2f2bed8abe963219a71fb309cb1245323d
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Sat Dec 7 17:18:51 2024 -0500
+
+    Formatting
+
+commit 90ca21b252c2bb4a4920d708b51805ff7a54de17
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Fri Dec 6 11:48:57 2024 -0500
+
+    Some bug fixes
+
+commit 152d0687d724f592a1ba2aa4a372678202f78f3f
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 5 22:12:59 2024 -0500
+
+    Fix recommendation system
+
+commit 8c3d537c13751b8856d92db4d2dc8738b3275429
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 5 21:29:42 2024 -0500
+
+    Delete unused data dir
+
+commit 495ce60b7ae0883045fb2a17a252e445b45d3036
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 5 21:25:37 2024 -0500
+
+    add .gitignore
+
+commit b8c76d6312c530c199799700523748aa113f2961
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 5 21:23:50 2024 -0500
+
+    Fix formatting
+
+commit bae7d66aa9c750bb23499f37b96d2e1e642a1249
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Thu Dec 5 21:20:10 2024 -0500
+
+    Finished implementation, pre-testing
+
+commit 7770c53fa6f9110abdd7a3cbd23a67dd01018926
+Author: Daniel Sachs <ds2393@cornell.edu>
+Date:   Mon Dec 2 14:28:51 2024 -0500
+
+    Updated test cases
+
+commit 5109f896c3c5f37bdebba5de15ac35b00c0cea24
+Author: Daniel Sachs <ds2393@cornell.edu>
+Date:   Mon Dec 2 13:46:38 2024 -0500
+
+    Implemented updates to ratios.ml and test.ml
+
+commit 479de0a7efd8a12f5b77a46bf691938f4ebcf77e
+Author: jtp243 <jtp243@cornell.edu>
+Date:   Wed Oct 30 19:02:49 2024 -0400
+
+    Update AUTHORS.md
+
+commit 771238a42f1e5ddc5e7f44f1f9b22ea16cbe5203
+Author: jtp243 <jtp243@cornell.edu>
+Date:   Wed Oct 30 19:01:50 2024 -0400
+
+    Update INSTALL.md
+
+commit b4cc41e728aee65fed3991eeeb6d05484c300358
+Author: Alan Zhao <az456@cornell.edu>
+Date:   Wed Oct 30 18:54:48 2024 -0400
+
+    Implementing files useful for background and
+    information for this project.
+    
+    -implemented YAML
+    -updated AUTHORS.md
+    -updates INSTALL.md
+
+commit 7e72774ad1353a168a08e84831d4bfa669321354
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Wed Oct 30 17:46:15 2024 -0400
+
+    Testing, polishing, and reformatting.
+
+commit e2c35a56323f6fbe2081eae7e3a9a64e408d9966
+Author: Jake Phelan <jtp243@cornell.edu>
+Date:   Mon Oct 28 19:41:07 2024 -0400
+
+    Improved error handling
+
+commit f285c2ee8bd92ae32c43e87611a3cdc1657d8979
+Author: ds2393 <17088+ds2393@users.noreply.github.coecis.cornell.edu>
+Date:   Mon Oct 28 16:07:03 2024 -0400
+
+    Update README.md
+
+commit c63ad05982c4c5f0d35819c28ec8f4585a121c62
+Author: Daniel Sachs <ds2393@cornell.edu>
+Date:   Mon Oct 28 16:05:09 2024 -0400
+
+    Updates
+
+commit 20df540f8ab3763c88d55058aef931ba261c7444
+Author: Alan Zhao <az456@cornell.edu>
+Date:   Sat Oct 26 22:02:26 2024 -0400
+
+    Made edits to lib and main
+    - Added and implemented the stocks compilation unit
+    - Edited the main file to leverage the stocks compilation unit
+    - Made edits to dune files converting "A4" to "Final_Project"
+
+commit bcae2c8225a1870eda59cc8d232a1db071790170
+Author: Alan Zhao <az456@cornell.edu>
+Date:   Thu Oct 24 14:34:40 2024 -0400
+
+    Initial Commit- pasting necessary files for a dune
+    project.
+
+commit eebb909eff95d4d27c3fa84ced22f15408c817f5
+Author: jrt273 <jrt273@cornell.edu>
+Date:   Thu Oct 10 21:58:27 2024 -0400
+
+    Update README.md
+    
+    Added members' names and emails.
+
+commit 6c03856554c36323232640d3179d3278832e0519
+Author: jrt273 <jrt273@cornell.edu>
+Date:   Thu Oct 10 21:48:34 2024 -0400
+
+    Initial commit
