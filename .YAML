@@ -18,14 +18,14 @@ title: "Stock Financial Assistant"
 # OK if this is a Cornell Github link, but public gallery viewers won't be able to see it.
 git-repo: "https://github.coecis.cornell.edu/jrt273/CS-3110-Final-Project"
 # Replace the URL with your own demo video.
-demo-video-url: "https://youtu.be/VLGbpgOwc94"
+demo-video-url: "https://youtu.be/RvRB4JVtG_k"
 # Write a short, attention-grabbing description of your project.
 desc: >
   Our financial assistant is to create a tool that makes analyzing stock data easy and useful for users. 
-  It allows people to enter stock symbols, choose time intervals, and get helpful insights like moving 
-  averages. The idea is to keep the interface simple so that anyone, regardless of their financial 
-  background, can use the tool to make more informed decisions about their investments. Specifically, 
-  we decided to focus on calculating moving averages as a core metric, which gives users a clearer 
-  picture of stock trends over a period of time. The moving average is particularly useful because 
-  it smooths out day-to-day price fluctuations and highlights the overall direction of the stock's 
-  performance.
+  It allows people to enter the stocks they are invested in along with the amount invested in each stock, 
+  and get helpful recommendations based on how the stocks are doing. The idea is to keep the interface simple 
+  so that anyone, regardless of their financial background, can use the tool to make more informed decisions 
+  about their investments. Specifically, we decided to focus on calculating moving averages as a core metric, 
+  with many different ratios (like liquidity, profitability, leverage) to give an indication as to whether or 
+  not a stock is performing well. The moving average is particularly useful because it smooths out day-to-day 
+  price fluctuations and highlights the overall direction of the stock's performance.

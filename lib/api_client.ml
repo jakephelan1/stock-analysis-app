@@ -15,8 +15,6 @@ let fetch_stock_data symbol statement =
   Cohttp_lwt.Body.to_string body >|= fun response_body ->
   Yojson.Basic.from_string response_body
 
-(* Altered to get data for most recent year only. We don't care about non-recent
-   years*)
 let extract_data json =
   let reports =
     json

@@ -1,5 +1,11 @@
 open Lwt.Infix
 
+(* AF: A portfolio [pf] represents a collection of stocks where each pair (s, a)
+   in the list [pf] corresponds to a stock symbol [s] (a string) and the amount
+   of money [a] invested in that stock. The empty list represents a portfolio
+   with no stocks. *)
+(* RI: For a portfolio [pf]: - All amounts [a] must be non-negative ([a >= 0]
+   for all (s, a) in [pf]). *)
 type t = (string * float) list
 
 let empty : t = []

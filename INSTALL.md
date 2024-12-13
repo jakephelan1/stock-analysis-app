@@ -1,4 +1,4 @@
-Download the code. Before you run anything, make sure you use `opam install` to install the following:
+Download the code. Before you run anything, make sure you use `opam install` to install the following in order:
 - lwt_ssl 1.2.0
 - lwt_ppx 5.8.0
 - cohttp-lwt-unix 5.3.0
